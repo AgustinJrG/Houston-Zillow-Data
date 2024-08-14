@@ -1,6 +1,10 @@
 # Houston-Zillow-Data
 
 ## Introduction
+
+### Color/Heat Map
+<img width="468" alt="image" src="https://github.com/user-attachments/assets/5e606d76-2706-43c3-b8f3-d71f5010b7d4">
+
 The purpose of this Analysis Project is to find out the cost of living for each Zip Code in the city of Houston, Texas. This is useful for an individual who is interested in knowing 
 about the Cost of Living in Houston. The information gathered in this project is useful for someone who wants to buy a house in Houston, whether they currently live in Houston or 
 may want to move to Houston. The project shows how different Zip Codes have different cost of living.
