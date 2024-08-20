@@ -159,14 +159,3 @@ for page in range(1,21):
 
 print('Done')
 
-
-
-"""
-pprint.pp(regionId)
-pprint.pp(regionType)
-pprint.pp(regionBoundN)
-pprint.pp(regionBoundS)
-pprint.pp(regionBoundE)
-pprint.pp(regionBoundW)
-print('Done')
-"""
