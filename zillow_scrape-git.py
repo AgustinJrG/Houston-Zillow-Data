@@ -1,0 +1,172 @@
+import openpyxl
+from openpyxl.utils import get_column_letter
+import requests
+import pprint
+from openpyxl.styles import Font
+import json
+import bs4
+from ast import literal_eval
+
+
+
+# Opens workbook
+
+wb = openpyxl.load_workbook('UpdatedRealEstate.xlsx')
+
+
+# Font used for column in sheets
+bold24Font = Font(name='Times New Roman', size = 24, bold = True)
+
+# Font used for cell in sheets
+cellFont = Font(name = 'Times New Roman', size = 18)
+
+
+# Column names for spreadsheet
+topCellNames = ['Property', 'Price', 'Bedrooms', 'Bathrooms', 'Sq Ft', 'Broker Name', 'Base Monthly Income']
+
+
+
+# Function that creates a sheet in the workbook if the current zipCode is not in the workbook
+def create_sheet(propInfo):
+
+    wb.create_sheet(title = zipCode)
+
+    currentSheet = wb[zipCode]
+
+    for y in range(len(propInfo)):
+
+        cellName = get_column_letter(y+1) + '1'
+        letter = get_column_letter(y+1)
+
+        currentSheet[cellName].font = bold24Font
+        currentSheet[cellName] = topCellNames[y]
+
+        currentSheet.column_dimensions[letter].width = 40
+
+
+
+# Function that will input the data into the appropriate cell for each listing
+def input_info(propInfo):
+
+    currentSheet = wb[zipCode]
+
+    newRowNumber = str(currentSheet.max_row)
+
+    for c in range(currentSheet.max_column):
+
+        newCurrentCell = get_column_letter(c+1) + newRowNumber
+
+        currentSheet[newCurrentCell] = propInfo[c]
+
+
+
+# APIN endpoint and default browser
+def get_listings(api_key, listing_url):
+
+    header = {'User-Agent':'Mozilla/5.0'}
+
+
+    url = 'https://app.scrapeak.com/v1/scrapers/zillow/listing'
+
+    querystring = {'api_key': api_key, 'url':listing_url}
+
+    return requests.request("GET", url, params=querystring, headers = header)
+ 
+
+
+
+#/ Set your API key and query
+api_key = ""
+
+
+# For loop that goes through the 20 pages allowed by zillow.
+
+for page in range(1,21):
+
+    # Zillow URL that has the criteria.
+    zillow_url = 'https://www.zillow.com/houston-tx/{page}_p/?searchQueryState=%7B%22pagination%22%3A%7B%22currentPage%22%3A{page}%7D%2C%22isMapVisible%22%3Atrue%2C%22mapBounds%22%3A%7B%22west%22%3A-95.88439999023439%2C%22east%22%3A-94.96429500976564%2C%22south%22%3A29.43979468660312%2C%22north%22%3A30.194000839673834%7D%2C%22usersSearchTerm%22%3A%22Houston%2C%20TX%22%2C%22regionSelection%22%3A%5B%7B%22regionId%22%3A39051%2C%22regionType%22%3A6%7D%5D%2C%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C%22land%22%3A%7B%22value%22%3Afalse%7D%2C%22ah%22%3A%7B%22value%22%3Atrue%7D%2C%22apa%22%3A%7B%22value%22%3Afalse%7D%2C%22manu%22%3A%7B%22value%22%3Afalse%7D%7D%2C%22isListVisible%22%3Atrue%7D'
+
+    # Zillow URL modiffied to go through page 1-20
+    listing_url = zillow_url.format(page = page)
+
+    # Getting the response
+    listing_response = get_listings(api_key, listing_url)
+
+    # Types out current working page
+    print('Page ', page)
+
+    # For loop that will go through the 41 listings on the url
+    # TRY & EXCEPTIONs to catch any values that are not in the listing and replacing them with N/A
+    
+    for prop in range(41):
+
+        try:
+            detailUrl = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['detailUrl']
+        except KeyError:
+            detailUrl = 'N/A'
+
+        try:
+            price = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['unformattedPrice']
+        except KeyError:
+            price = 'N/A'
+
+        try:
+            zipCode = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['addressZipcode']
+        except KeyError:
+            zipCode = 'N/A'
+
+        try:
+            beds = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['beds']
+        except KeyError:
+            beds = 'N/A'
+
+        try:
+            baths = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['baths']
+        except KeyError:
+            baths = 'N/A'
+
+        try:
+            sqFT = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['area']
+        except KeyError:
+            sqFT = 'N/A'
+
+        try:
+            brokerName = listing_response.json()['data']['cat1']['searchResults']['listResults'][prop]['brokerName']
+        except KeyError:
+            brokerName = 'N/A'
+
+
+        # List saving all gathered information
+        propInfo = [detailUrl, price, beds, baths, sqFT, brokerName]
+
+
+        # if loop that checks if zipCode sheet exits in the workbook
+        if zipCode not in wb.sheetnames:
+
+            # function create_sheet with the list past to it
+            create_sheet(propInfo)
+            input_info(propInfo)
+            wb.save('UpdatedRealEstate.xlsx')
+
+        # else loop if zipCode is in sheets
+        else:
+
+            input_info(propInfo)
+            wb.save('UpdatedRealEstate.xlsx')
+
+    # clearing the list
+    propInfo.clear()
+
+print('Done')
+
+
+
+"""
+pprint.pp(regionId)
+pprint.pp(regionType)
+pprint.pp(regionBoundN)
+pprint.pp(regionBoundS)
+pprint.pp(regionBoundE)
+pprint.pp(regionBoundW)
+print('Done')
+"""
