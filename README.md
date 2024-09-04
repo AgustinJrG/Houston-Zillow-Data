@@ -65,6 +65,8 @@ it possible to only scrape 800 of the 10,500 possible listings, which is about 7
 disproportionate number of listings in for each Zip Code that was recorded. Some Zip Codes may only have one listing. Some may have 10 listings and some Zip Codes did not have a 
 single listing recorded for them.
 
+According to the data, the average house value in Houston, Texas, is around $300,000 which will make the average mortgage be around $2000 USD. For a person to afford this living within the 50/30/20 budget rule, where 50% of the take home salary goes towards needs including a 35% of that goes towards mortgage, 30% goes towards wants, and 20% goes towards savings, a person would need a monthly take home salary $5,789 meaning a yearly take home salary of $69,468 is needed. 
+
 
 
 
