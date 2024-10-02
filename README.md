@@ -2,6 +2,9 @@
 
 ## Introduction
 
+### Link
+Tableau Link https://public.tableau.com/app/profile/agustin.garcia3499/viz/HoustonsZipCodeHouseMarket/ZipCodes
+
 ### Color/Heat Map
 <img width="468" alt="image" src="https://github.com/user-attachments/assets/5e606d76-2706-43c3-b8f3-d71f5010b7d4">
 
