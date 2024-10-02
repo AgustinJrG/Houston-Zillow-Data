@@ -58,6 +58,9 @@ Yearly Salary: $69,468
 ## Map
 
 <img width="468" alt="image" src="https://github.com/user-attachments/assets/5e606d76-2706-43c3-b8f3-d71f5010b7d4">
+<img width="1440" alt="tableau" src="https://github.com/user-attachments/assets/b2db80af-01db-4a1d-beae-0a89d59239f4">
+<img width="1438" alt="tablue" src="https://github.com/user-attachments/assets/fb0683cf-63b2-4fa1-b8b5-d047dcd9851d">
+
 
 ## Discussion
 Limitations first appear when scraping data from Zillow. According to Zillow, Houston has around 10,500 House Listings available to scrape data. Zillow’s anti-scraping methods made
